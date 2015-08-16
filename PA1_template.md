@@ -158,7 +158,8 @@ abline(v=median_steps, col = "red", lwd = 1, lty = 2)
 
 ## Imputing missing values
 
-I ran out of time trying to complete this section.  Therefore all other charts are not based on the imputed data but I hope you don't penalise me for all work that relies on the imputed values.
+Below is my strategy for imputting missing values.  I created an avg steps for each interval and merged this with the original data frame. Where the original steps for a specific interval was NA, I replaced its value with the average for the segment.
+
 
 
 
@@ -173,28 +174,10 @@ sum(good)
 
 ```r
 bad <- sum(!complete.cases(df_act))
-# tot_z <- sum(bad2)
-# df_act_good <- df_act
-# z = 1
-# 
-# for (j in bad){
-#   
-#   the_int <- df_act$interval[j]
-#   the_steps <- df_act$steps[j]
-#   if(is.na(the_steps)){
-#     good_steps <- df_avgbyinterval[which(df_avgbyinterval$interval==the_int),][,2]
-#     df_act_good$steps <- good_steps
-#   }
-#   if(z==tot_z){
-#     break
-#   }
-#   z = z+1
-# }
-# 
-# bad2 <- sum(complete.cases(df_act_good))
 ```
 
-The total number of missing values "NA" values is 2304.  Other details of the dataset can be seen in the following summary.
+The total number of missing values "NA" values in the orginal data frame is 2304.  Other details of the dataset can be seen in the following summary.
+
 
 
 ```r
@@ -221,6 +204,57 @@ summary(df_act)
 ```
 
 
+```r
+df_good <- merge(df_act, df_avgbyinterval, by.x = "interval", by.y = "interval")
+df_good <- arrange(df_good, date)
+##replace(df_good$steps.x, !complete.cases(df_act), df_good$steps.y)
+for (z in df_good){
+  xsteps <- df_good$steps.x[z]
+  ysteps <- df_good$steps.y[z]
+  if(is.na(xsteps)){
+    df_good$steps.x <- df_good$steps.y
+  }
+}
+
+good2 <- complete.cases(df_good)
+sum(good2)
+```
+
+```
+## [1] 17568
+```
+
+```r
+bad2 <- sum(!complete.cases(df_good))
+```
+
+The total number of missing values "NA" values in the imputted data frame is 0.  Other details of the dataset can be seen in the following summary.
+
+
+
+```r
+summary(df_good)
+```
+
+```
+##     interval         steps.x             date              wkday     
+##  Min.   :   0.0   Min.   :  0.000   Min.   :2012-10-01   Sun  :2304  
+##  1st Qu.: 588.8   1st Qu.:  2.486   1st Qu.:2012-10-16   Mon  :2592  
+##  Median :1177.5   Median : 34.113   Median :2012-10-31   Tues :2592  
+##  Mean   :1177.5   Mean   : 37.383   Mean   :2012-10-31   Wed  :2592  
+##  3rd Qu.:1766.2   3rd Qu.: 52.835   3rd Qu.:2012-11-15   Thurs:2592  
+##  Max.   :2355.0   Max.   :206.170   Max.   :2012-11-30   Fri  :2592  
+##                                                          Sat  :2304  
+##       day         steps.y       
+##  Min.   :275   Min.   :  0.000  
+##  1st Qu.:290   1st Qu.:  2.486  
+##  Median :305   Median : 34.113  
+##  Mean   :305   Mean   : 37.383  
+##  3rd Qu.:320   3rd Qu.: 52.835  
+##  Max.   :335   Max.   :206.170  
+## 
+```
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 There are differences in the activity patterns between weekdays and weekends as illustrated by the following charts.
@@ -244,7 +278,7 @@ par(mfcol = c(2,1))
     legend("topright", pch = 0, col = c("blue", "red"), cex = .75, legend = c("time series", paste("max interval occurs at ", maxinterval_wend)))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 ```r
 options(warn = 0)
@@ -296,5 +330,5 @@ df_avgbyfactor <- aggregate(steps ~ interval + weekfact, data = df_act, mean)
 xyplot(steps~interval|weekfact, data = df_avgbyfactor, type = "l", layout = c(1,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
 

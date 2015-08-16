@@ -119,41 +119,48 @@ abline(v=median_steps, col = "red", lwd = 1, lty = 2)
 
 ## Imputing missing values
 
-I ran out of time trying to complete this section.  Therefore all other charts are not based on the imputed data but I hope you don't penalise me for all work that relies on the imputed values.
+Below is my strategy for imputting missing values.  I created an avg steps for each interval and merged this with the original data frame. Where the original steps for a specific interval was NA, I replaced its value with the average for the segment.
+
 
 
 ```{r}
 good <- complete.cases(df_act)
 sum(good)
 bad <- sum(!complete.cases(df_act))
-# tot_z <- sum(bad2)
-# df_act_good <- df_act
-# z = 1
-# 
-# for (j in bad){
-#   
-#   the_int <- df_act$interval[j]
-#   the_steps <- df_act$steps[j]
-#   if(is.na(the_steps)){
-#     good_steps <- df_avgbyinterval[which(df_avgbyinterval$interval==the_int),][,2]
-#     df_act_good$steps <- good_steps
-#   }
-#   if(z==tot_z){
-#     break
-#   }
-#   z = z+1
-# }
-# 
-# bad2 <- sum(complete.cases(df_act_good))
-
 ```
 
-The total number of missing values "NA" values is `r bad`.  Other details of the dataset can be seen in the following summary.
+The total number of missing values "NA" values in the orginal data frame is `r bad`.  Other details of the dataset can be seen in the following summary.
+
 
 ```{r}
 summary(df_act)
 ```
 
+```{r}
+df_good <- merge(df_act, df_avgbyinterval, by.x = "interval", by.y = "interval")
+df_good <- arrange(df_good, date)
+##replace(df_good$steps.x, !complete.cases(df_act), df_good$steps.y)
+for (z in df_good){
+  xsteps <- df_good$steps.x[z]
+  ysteps <- df_good$steps.y[z]
+  if(is.na(xsteps)){
+    df_good$steps.x <- df_good$steps.y
+  }
+}
+
+good2 <- complete.cases(df_good)
+sum(good2)
+bad2 <- sum(!complete.cases(df_good))
+
+
+```
+
+The total number of missing values "NA" values in the imputted data frame is `r bad2`.  Other details of the dataset can be seen in the following summary.
+
+
+```{r}
+summary(df_good)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 

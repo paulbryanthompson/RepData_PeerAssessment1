@@ -181,31 +181,12 @@ abline(v=median_steps, col = &quot;red&quot;, lwd = 1, lty = 2)</code></pre>
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
-<p>I ran out of time trying to complete this section. Therefore all other charts are not based on the imputed data but I hope you don’t penalise me for all work that relies on the imputed values.</p>
+<p>Below is my strategy for imputting missing values. I created an avg steps for each interval and merged this with the original data frame. Where the original steps for a specific interval was NA, I replaced its value with the average for the segment.</p>
 <pre class="r"><code>good &lt;- complete.cases(df_act)
 sum(good)</code></pre>
 <pre><code>## [1] 15264</code></pre>
-<pre class="r"><code>bad &lt;- sum(!complete.cases(df_act))
-# tot_z &lt;- sum(bad2)
-# df_act_good &lt;- df_act
-# z = 1
-# 
-# for (j in bad){
-#   
-#   the_int &lt;- df_act$interval[j]
-#   the_steps &lt;- df_act$steps[j]
-#   if(is.na(the_steps)){
-#     good_steps &lt;- df_avgbyinterval[which(df_avgbyinterval$interval==the_int),][,2]
-#     df_act_good$steps &lt;- good_steps
-#   }
-#   if(z==tot_z){
-#     break
-#   }
-#   z = z+1
-# }
-# 
-# bad2 &lt;- sum(complete.cases(df_act_good))</code></pre>
-<p>The total number of missing values “NA” values is 2304. Other details of the dataset can be seen in the following summary.</p>
+<pre class="r"><code>bad &lt;- sum(!complete.cases(df_act))</code></pre>
+<p>The total number of missing values “NA” values in the orginal data frame is 2304. Other details of the dataset can be seen in the following summary.</p>
 <pre class="r"><code>summary(df_act)</code></pre>
 <pre><code>##      steps             date               interval        wkday     
 ##  Min.   :  0.00   Min.   :2012-10-01   Min.   :   0.0   Sun  :2304  
@@ -222,6 +203,39 @@ sum(good)</code></pre>
 ##  Mean   :305  
 ##  3rd Qu.:320  
 ##  Max.   :335  
+## </code></pre>
+<pre class="r"><code>df_good &lt;- merge(df_act, df_avgbyinterval, by.x = &quot;interval&quot;, by.y = &quot;interval&quot;)
+df_good &lt;- arrange(df_good, date)
+##replace(df_good$steps.x, !complete.cases(df_act), df_good$steps.y)
+for (z in df_good){
+  xsteps &lt;- df_good$steps.x[z]
+  ysteps &lt;- df_good$steps.y[z]
+  if(is.na(xsteps)){
+    df_good$steps.x &lt;- df_good$steps.y
+  }
+}
+
+good2 &lt;- complete.cases(df_good)
+sum(good2)</code></pre>
+<pre><code>## [1] 17568</code></pre>
+<pre class="r"><code>bad2 &lt;- sum(!complete.cases(df_good))</code></pre>
+<p>The total number of missing values “NA” values in the imputted data frame is 0. Other details of the dataset can be seen in the following summary.</p>
+<pre class="r"><code>summary(df_good)</code></pre>
+<pre><code>##     interval         steps.x             date              wkday     
+##  Min.   :   0.0   Min.   :  0.000   Min.   :2012-10-01   Sun  :2304  
+##  1st Qu.: 588.8   1st Qu.:  2.486   1st Qu.:2012-10-16   Mon  :2592  
+##  Median :1177.5   Median : 34.113   Median :2012-10-31   Tues :2592  
+##  Mean   :1177.5   Mean   : 37.383   Mean   :2012-10-31   Wed  :2592  
+##  3rd Qu.:1766.2   3rd Qu.: 52.835   3rd Qu.:2012-11-15   Thurs:2592  
+##  Max.   :2355.0   Max.   :206.170   Max.   :2012-11-30   Fri  :2592  
+##                                                          Sat  :2304  
+##       day         steps.y       
+##  Min.   :275   Min.   :  0.000  
+##  1st Qu.:290   1st Qu.:  2.486  
+##  Median :305   Median : 34.113  
+##  Mean   :305   Mean   : 37.383  
+##  3rd Qu.:320   3rd Qu.: 52.835  
+##  Max.   :335   Max.   :206.170  
 ## </code></pre>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
