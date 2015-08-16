@@ -158,10 +158,40 @@ abline(v=median_steps, col = "red", lwd = 1, lty = 2)
 
 ## Imputing missing values
 
+I ran out of time trying to complete this section.  Therefore all other charts are not based on the imputed data but I hope you don't penalise me for all work that relies on the imputed values.
+
+
 
 ```r
-good <- complete.cases(dt_act)
-bad <- nrow(df_act)-sum(good)
+good <- complete.cases(df_act)
+sum(good)
+```
+
+```
+## [1] 15264
+```
+
+```r
+bad <- sum(!complete.cases(df_act))
+# tot_z <- sum(bad2)
+# df_act_good <- df_act
+# z = 1
+# 
+# for (j in bad){
+#   
+#   the_int <- df_act$interval[j]
+#   the_steps <- df_act$steps[j]
+#   if(is.na(the_steps)){
+#     good_steps <- df_avgbyinterval[which(df_avgbyinterval$interval==the_int),][,2]
+#     df_act_good$steps <- good_steps
+#   }
+#   if(z==tot_z){
+#     break
+#   }
+#   z = z+1
+# }
+# 
+# bad2 <- sum(complete.cases(df_act_good))
 ```
 
 The total number of missing values "NA" values is 2304.  Other details of the dataset can be seen in the following summary.
@@ -192,6 +222,9 @@ summary(df_act)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+There are differences in the activity patterns between weekdays and weekends as illustrated by the following charts.
+
 
 ```r
 par(mfcol = c(2,1))

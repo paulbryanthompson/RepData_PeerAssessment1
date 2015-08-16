@@ -66,7 +66,7 @@ The mean number of steps taken per day is `r mean_steps`.
 
 The daily activity can be shown in the following plot which shows the average number of steps per interval.  This plot illustrates what you could expect from the subject on any given day, not separating it out for weekend or weekday.
 
-```{r}
+```{r, fig.height=10}
 maxsteps <- max(df_byinterval$steps)
 maxinterval <- filter(df_byinterval, steps == maxsteps)[1,1]
 maxsteps_wend <- max(df_byinterval_wend$steps)
@@ -119,10 +119,32 @@ abline(v=median_steps, col = "red", lwd = 1, lty = 2)
 
 ## Imputing missing values
 
-```{r}
-good <- complete.cases(dt_act)
-bad <- nrow(df_act)-sum(good)
+I ran out of time trying to complete this section.  Therefore all other charts are not based on the imputed data but I hope you don't penalise me for all work that relies on the imputed values.
 
+
+```{r}
+good <- complete.cases(df_act)
+sum(good)
+bad <- sum(!complete.cases(df_act))
+# tot_z <- sum(bad2)
+# df_act_good <- df_act
+# z = 1
+# 
+# for (j in bad){
+#   
+#   the_int <- df_act$interval[j]
+#   the_steps <- df_act$steps[j]
+#   if(is.na(the_steps)){
+#     good_steps <- df_avgbyinterval[which(df_avgbyinterval$interval==the_int),][,2]
+#     df_act_good$steps <- good_steps
+#   }
+#   if(z==tot_z){
+#     break
+#   }
+#   z = z+1
+# }
+# 
+# bad2 <- sum(complete.cases(df_act_good))
 
 ```
 
@@ -134,7 +156,10 @@ summary(df_act)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+There are differences in the activity patterns between weekdays and weekends as illustrated by the following charts.
+
+```{r, fig.height=10}
 par(mfcol = c(2,1))
   plot(df_byinterval_wday$interval, df_byinterval_wday$steps, type = "l",
       main = "Average Weekday Daily Number of Steps per Interval",
