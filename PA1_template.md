@@ -123,7 +123,7 @@ plot(df_avgbyinterval_wday$interval, df_avgbyinterval_wday$steps, type = "l",
      col = "green")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-2.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 ```r
 ##abline(v=maxinterval, col = "red", lwd = 3, lty = 1)
@@ -144,7 +144,7 @@ abline(v=mean_steps, col = "grey", lwd = 3, lty = 1)
 abline(v=median_steps, col = "red", lwd = 1, lty = 2)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
 
 ```r
 hist(df_stepsbyday$steps, breaks = 100, main = "Histogram of Total Steps per Day - 100 breaks",
@@ -154,7 +154,7 @@ abline(v=mean_steps, col = "grey", lwd = 3, lty = 1)
 abline(v=median_steps, col = "red", lwd = 1, lty = 2)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-2.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-6-2.png) 
 
 ## Imputing missing values
 
@@ -278,7 +278,7 @@ par(mfcol = c(2,1))
     legend("topright", pch = 0, col = c("blue", "red"), cex = .75, legend = c("time series", paste("max interval occurs at ", maxinterval_wend)))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
 
 ```r
 options(warn = 0)
@@ -330,5 +330,5 @@ df_avgbyfactor <- aggregate(steps ~ interval + weekfact, data = df_act, mean)
 xyplot(steps~interval|weekfact, data = df_avgbyfactor, type = "l", layout = c(1,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
 

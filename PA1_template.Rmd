@@ -66,7 +66,7 @@ The mean number of steps taken per day is `r mean_steps`.
 
 The daily activity can be shown in the following plot which shows the average number of steps per interval.  This plot illustrates what you could expect from the subject on any given day, not separating it out for weekend or weekday.
 
-```{r, fig.height=10}
+```{r, fig.height=5}
 maxsteps <- max(df_byinterval$steps)
 maxinterval <- filter(df_byinterval, steps == maxsteps)[1,1]
 maxsteps_wend <- max(df_byinterval_wend$steps)
@@ -79,6 +79,9 @@ plot(df_avgbyinterval$interval, df_avgbyinterval$steps, type = "l",
      xlab = "24 Hour Time",
      ylab = "Number of steps",
      col = "blue")
+```
+```{r, fig.height=10}
+
 
 par(mfcol = c(3,1))
 plot(df_avgbyinterval$interval, df_avgbyinterval$steps, type = "l",
