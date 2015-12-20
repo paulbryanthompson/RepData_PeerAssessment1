@@ -58,14 +58,15 @@ df_act$date <- as.Date(df_act$date)
 
 
 ## Add date fields to summarise the data to look for patterns
-df_act$wkday <- lubridate::wday(df_act$date, label = TRUE) ## create day of week field
+df_act$wkday <- lubridate::wday(df_act$date, label = TRUE) 
+## create day of week field
 df_act$day <- lubridate::yday(df_act$date)
 ```
 ## What is mean total number of steps taken per day?
 
 
 ```r
-df_byday <- group_by(df_act, day)
+##df_byday <- group_by(df_act, day)
 ##summarise(df_byday, sum(steps), mean(steps))
 ##summarise(filter(df_act, !is.na(steps)), sum(steps))
 df_stepsbyday <- aggregate(steps ~ day, data = df_act, sum)
@@ -75,6 +76,7 @@ df_byinterval_wday <- aggregate(steps ~ interval, data = filter(df_act, wkday !=
 df_avgbyinterval <- aggregate(steps ~ interval, data = df_act, mean)
 df_avgbyinterval_wend <- aggregate(steps ~ interval, data = filter(df_act, wkday == "Sun" | wkday == "Sat"), mean)
 df_avgbyinterval_wday <- aggregate(steps ~ interval, data = filter(df_act, wkday != "Sun" & wkday != "Sat"), mean)
+
 mean_steps <- summarise(df_stepsbyday, mean(steps))
 median_steps <- summarise(df_stepsbyday, median(steps))
 ```
